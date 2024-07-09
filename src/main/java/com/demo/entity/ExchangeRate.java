@@ -16,8 +16,8 @@ public class ExchangeRate {
     private Long id;
     @Column(name="name")
     private String name;
-    @Column(precision = 10, scale = 4)
+    @Column(name="price",precision = 10, scale = 4)
     private BigDecimal price;
-    @Column(name="date")
+    @Column(name="create_date")
     private String date;
 }

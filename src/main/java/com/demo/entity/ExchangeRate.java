@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 
 @Data
@@ -19,5 +20,5 @@ public class ExchangeRate {
     @Column(name="price",precision = 10, scale = 4)
     private BigDecimal price;
     @Column(name="create_date")
-    private String date;
+    private LocalDate date;
 }

@@ -44,7 +44,10 @@ public class ExchangeRateService {
 
         for (ExchangeRateItem item : itemsToday) {
             ExchangeRate entity = new ExchangeRate();
-            entity.setDate(item.getDate());
+            String dateString = item.getDate();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+            LocalDate localDate = LocalDate.parse(dateString, formatter);
+            entity.setDate(localDate);
             entity.setPrice(new BigDecimal(item.getUsdToNtd()));
             save(entity);
         }

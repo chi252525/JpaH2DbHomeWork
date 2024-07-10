@@ -5,6 +5,7 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 
 @Data
@@ -20,5 +21,5 @@ public class ExchangeRate {
     @Column(name="price",precision = 10, scale = 4)
     private BigDecimal price;
     @Column(name="create_date")
-    private LocalDate date;
+    private LocalDateTime date;
 }

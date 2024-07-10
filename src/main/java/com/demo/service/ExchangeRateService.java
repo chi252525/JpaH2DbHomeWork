@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,12 +36,12 @@ public class ExchangeRateService {
     @Scheduled(cron = "0 0 18 * * ?") // 每天下午 6 點觸發
     public void fetchAndSaveExchangeRate() {
         ExchangeRateApiResponse exchangeRateAPI = client.getExchangeRateAPI();
-        log.info("exchangeRateAPI"+new Gson().toJson(exchangeRateAPI));
+        log.info("exchangeRateAPI" + new Gson().toJson(exchangeRateAPI));
 //        String todayDate = LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE);
 //        log.info("todayDate:"+todayDate);
         LocalDate yesterday = LocalDate.now().minusDays(1);
         String yesterdayDate = yesterday.format(DateTimeFormatter.BASIC_ISO_DATE);
-        log.info("yesterdayDate:"+yesterdayDate);
+        log.info("yesterdayDate:" + yesterdayDate);
         List<ExchangeRateItem> itemsToday = exchangeRateAPI.getItemsList().stream()
                 .filter(e -> e.getDate().equals(yesterdayDate))
                 .collect(Collectors.toList());
@@ -57,8 +58,9 @@ public class ExchangeRateService {
         String dateString = item.getDate();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
         LocalDate localDate = LocalDate.parse(dateString, formatter);
+        LocalDateTime localDateTime = localDate.atStartOfDay();
         entity.setName("USD/NTD");
-        entity.setDate(localDate);
+        entity.setDate(localDateTime);
         entity.setPrice(new BigDecimal(item.getUsdToNtd()));
         return entity;
     }

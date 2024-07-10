@@ -36,22 +36,31 @@ public class ExchangeRateService {
     public void fetchAndSaveExchangeRate() {
         ExchangeRateApiResponse exchangeRateAPI = client.getExchangeRateAPI();
         log.info("exchangeRateAPI"+new Gson().toJson(exchangeRateAPI));
-        String todayDate = LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE);
-
+//        String todayDate = LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE);
+//        log.info("todayDate:"+todayDate);
+        LocalDate yesterday = LocalDate.now().minusDays(1);
+        String yesterdayDate = yesterday.format(DateTimeFormatter.BASIC_ISO_DATE);
+        log.info("yesterdayDate:"+yesterdayDate);
         List<ExchangeRateItem> itemsToday = exchangeRateAPI.getItemsList().stream()
-                .filter(e -> e.getDate().equals(todayDate))
+                .filter(e -> e.getDate().equals(yesterdayDate))
                 .collect(Collectors.toList());
 
         for (ExchangeRateItem item : itemsToday) {
-            ExchangeRate entity = new ExchangeRate();
-            String dateString = item.getDate();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-            LocalDate localDate = LocalDate.parse(dateString, formatter);
-            entity.setDate(localDate);
-            entity.setPrice(new BigDecimal(item.getUsdToNtd()));
+            ExchangeRate entity = getExchangeRate(item);
             save(entity);
         }
 
+    }
+
+    private ExchangeRate getExchangeRate(ExchangeRateItem item) {
+        ExchangeRate entity = new ExchangeRate();
+        String dateString = item.getDate();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+        LocalDate localDate = LocalDate.parse(dateString, formatter);
+        entity.setName("USD/NTD");
+        entity.setDate(localDate);
+        entity.setPrice(new BigDecimal(item.getUsdToNtd()));
+        return entity;
     }
 
 }

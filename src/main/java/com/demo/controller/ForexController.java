@@ -18,6 +18,6 @@ public class ForexController {
 
     @GetMapping("/history")
     public ResponseEntity<ApiResponse> getHistoricalRates(@RequestBody ForexRequest request) {
-        return forexService.getHistoricalRates(request);
+        return forexService.getRatesHistory(request);
     }
 }

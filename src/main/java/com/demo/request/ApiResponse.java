@@ -5,13 +5,12 @@ import lombok.Data;
 import java.util.List;
 @Data
 public class ApiResponse {
-    private String code;
-    private String message;
+
+    private ErrorResponse error;
     private List<CurrencyResponse> currency;
 
-    public ApiResponse(String code, String message, List<CurrencyResponse> currency) {
-        this.code = code;
-        this.message = message;
+    public ApiResponse(ErrorResponse error, List<CurrencyResponse> currency) {
+        this.error = error;
         this.currency = currency;
     }
 }
